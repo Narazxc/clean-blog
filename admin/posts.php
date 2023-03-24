@@ -1,6 +1,7 @@
 <?php
 
     require_once '../models/Post.php';
+    include('dbcon.php');
 
     // Start PHP session
     if (session_status() === PHP_SESSION_NONE) {
@@ -12,8 +13,16 @@
         exit();
     }
 
-    $posts = $_SESSION['posts'];
+    // $posts = $_SESSION['posts'];
     // Query all posts from table
+    $query = "select * from `blogs`";
+
+    $result = mysqli_query($connection, $query);
+
+
+    
+
+    
 
 ?>
 
@@ -63,17 +72,36 @@
                                 <tbody>
                                     <?php 
                                     
-                                        if (count($posts)) { 
-                                            foreach($posts as $post) {
-                                                echo '
-                                                    <tr>
-                                                        <td>' . $post->id . '</td>
-                                                        <td>' . $post->title . '</td>
-                                                        <td>' . $post->content . '</td>
-                                                        <td><img class="post-img" src="' . $post->imageUrl . '" /></td>
-                                                    </tr>
-                                                ';
-                                            }
+                                        // if (count($posts)) { 
+                                        //     foreach($posts as $post) {
+                                        //         echo '
+                                        //             <tr>
+                                        //                 <td>' . $post->id . '</td>
+                                        //                 <td>' . $post->title . '</td>
+                                        //                 <td>' . $post->content . '</td>
+                                        //                 <td><img class="post-img" src="' . $post->imageUrl . '" /></td>
+                                        //             </tr>
+                                        //         ';
+                                        //     }
+
+                                    if ($result){
+                                        
+                                    
+                                        while ($posts = mysqli_fetch_assoc($result)){
+                                            ?>
+                                        
+                                            <tr>
+                                                <td><?php echo $posts['id']; ?></td>
+                                                <td><?php echo $posts['title']; ?></td>
+                                                <td><?php echo $posts['content']; ?></td>
+                                                <td><img class="post-img" src=" <?php echo $posts['fileDestination']; ?>" /></td>
+                                            </tr>
+                                        
+                                            <?php
+                                                
+                                            
+                                        }
+
                                     
                                     ?>
 
@@ -86,7 +114,7 @@
                                     <?php } ?>
                                 </tbody>
                                 <?php
-                                echo count($posts);
+                                // echo count($posts);
                                 ?>
                             </table>
                         </div>

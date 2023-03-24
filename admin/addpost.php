@@ -1,5 +1,6 @@
 <?php
 require_once '../models/Post.php';
+include 'dbcon.php';
 
     // Start PHP session
     if (session_status() === PHP_SESSION_NONE) {
@@ -134,11 +135,19 @@ require_once '../models/Post.php';
                             echo "You cannot upload file of this type!";
                         }
                     
+                        // add new post to session global variable
+                        // $_SESSION['posts'][] = new Post(count($_SESSION['posts']) + 1, $title, $content, $fileDestination);
 
-                        $_SESSION['posts'][] = new Post(count($_SESSION['posts']) + 1, $title, $content, $fileDestination);
+                        $query = "insert into `blogs` (`title`, `content`, `fileDestination`) values ('$title', '$content', '$fileDestination')";
 
-                        header("Location: ./posts.php?uploadsuccess");
-                        exit();
+                        $result = mysqli_query($connection, $query);
+
+                        if(!$result){
+                            die("Query Failed".mysqli_error());
+                        } else {
+                            header("Location: ./posts.php?uploadsuccess");
+                            exit();
+                        }
                         
                         }
                     ?>
