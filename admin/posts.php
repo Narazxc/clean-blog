@@ -95,6 +95,8 @@
                                                 <td><?php echo $posts['title']; ?></td>
                                                 <td><?php echo $posts['content']; ?></td>
                                                 <td><img class="post-img" src=" <?php echo $posts['fileDestination']; ?>" /></td>
+                                                <td><a href="updatepost.php?id=<?php echo $posts['id']; ?>" class="btn btn-success">Update</a></td>
+                                                <td><a href="deletepost.php?id=<?php echo $posts['id']; ?>" class="btn btn-danger">Delete</a></td>
                                             </tr>
                                         
                                             <?php

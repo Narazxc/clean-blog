@@ -11,6 +11,31 @@ include 'dbcon.php';
         header("Location: ../index.php");
         exit();
     }
+
+    if (isset($_GET['id'])){
+        $id = $_GET['id'];
+    
+
+
+    $query = "select * from `blogs` where `id` = '$id'";
+
+    $result = mysqli_query($connection, $query);
+
+    if(!$result){
+        die("Query Failed".mysqli_error());
+    } else {
+
+        $result = mysqli_fetch_assoc($result);
+
+        print_r($result);
+
+
+    }
+
+}
+
+
+
 ?>
 
 <!DOCTYPE html>
@@ -55,22 +80,22 @@ include 'dbcon.php';
                                 <tbody>
                                     
                                     <tr>
-                                        <form method="POST" enctype="multipart/form-data">
+                                        <form action="updatepost.php?id_new=<?php echo $id; ?>" method="POST" enctype="multipart/form-data">
                                             <td>
                                                 <!-- <input class="form-control" name="id" type="number" placeholder="ID" /> -->
                                             </td>
                                             <td>
-                                                <input class="form-control" name="title" type="text" placeholder="Title" />
+                                                <input class="form-control" name="title" type="text" placeholder="Title" value="<?php echo $result['title']; ?>" />
                                             </td>
                                             <td>
-                                                <textarea class="form-control" name="content" id="exampleFormControlTextarea1" rows="3"></textarea>
+                                                <textarea class="form-control" name="content" id="exampleFormControlTextarea1" rows="3" ><?php echo $result['content']; ?></textarea>
                                                 <!-- <input class="form-control" name="content" type="text" placeholder="Content" /> -->
                                             </td>
                                             <td>
-                                                <input class="form-control" name="img" type="file" placeholder="Image" />
+                                                <input class="form-control" name="img" type="file" placeholder="Image"/>
                                             </td>
                                             <td>
-                                                <button class="btn btn-success" type="submit">Add</button>
+                                                <input class="btn btn-success" type="submit" values="Update" name="update_post"/>
                                             </td>
                                         </form>
                                     </tr>
@@ -84,7 +109,12 @@ include 'dbcon.php';
                     <?php
                     
 
-                    if (isset($_POST['title'])){
+                    if (isset($_POST['update_post'])){
+
+                        if (isset($_GET['id_new'])){
+                            $idnew = $_GET['id_new'];
+                        }
+                       
 
 
                         // $id = $_POST['id'];
@@ -138,24 +168,20 @@ include 'dbcon.php';
                         // add new post to session global variable
                         // $_SESSION['posts'][] = new Post(count($_SESSION['posts']) + 1, $title, $content, $fileDestination);
 
-                        $query = "insert into `blogs` (`title`, `content`, `fileDestination`) values ('$title', '$content', '$fileDestination')";
-                        // $query = "insert into `blogs` (`title`, `content`, `fileDestination`) values (?, ?, ?)";
-                        // $stmt = mysqli_prepare($connection, $query);
-                        // mysqli_stmt_bind_param($stmt, "sss", $title, $connection, $fileDestination);
-
+                        $query = "update `blogs` set `title` = '$title', `content` = '$content', `fileDestination` = '$fileDestination' where `id` = '$idnew'";
 
                         $result = mysqli_query($connection, $query);
-
-                        // $result = mysqli_stmt_execute($stmt);
-                        // echo "<script> window.location.href='./posts.php'</script>";
-
-                        if(!$result){
-                            die("Query Failed".mysqli_error());
-                        } else {
-                            header("Location: ./posts.php?uploadsuccess");
-                            exit();
+                        // header("Location: ./posts.php?uploadsuccess");
+                        echo "<script> window.location.href='./posts.php'</script>";
                             
-                        }
+
+                        // if(!$result){
+                        //     die("Query Failed".mysqli_error());
+                        // } else {
+
+
+                            
+                        // }
                         
                         }
                     ?>
